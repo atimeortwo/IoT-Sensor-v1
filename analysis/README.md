@@ -15,21 +15,3 @@ Rather than treating the telemetry as simple dashboard data, the system will be 
 - feature engineering for anomaly detection and TinyML
 
 This supports applied intuition for calculus, differential equations, linear algebra, statistics, and control systems while using real sensor data from the project itself.
-
-Decision Support and Control Logic
-This system is intended not only to collect and display telemetry, but also to support operational decisions.
-
-Examples of system determinations include:
-
-- normal environmental state
-- threshold exceeded
-- sustained alert condition
-- degraded node communication
-- invalid device input
-- future actuator recommendations
-
-Planned decision outputs include:
-- system status classification
-- severity level
-- recommended human action
-- future automated control actions
