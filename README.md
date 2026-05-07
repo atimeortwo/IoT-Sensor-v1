@@ -22,7 +22,7 @@ It also includes basic security controls such as:
 - Input validation
 - Secrets separation from source control
 
-### Main Features
+### Hardware
 - 1 x ESP32 DevKitV1
 - 1 x DHT11 temperature/humidity sensor
 - 1 x Potentiometer for threshold adjustment
@@ -30,6 +30,8 @@ It also includes basic security controls such as:
 - 2 x Resistors for LEDs
 - 1 x Breadboard
 - Various jumper wires
+
+### Software Capabilities
 - Wi-Fi connection from ESP32 to backend
 - FastAPI backend for ingestion and dashboard serving
 - SQLite database logging
@@ -87,9 +89,109 @@ DHT11 + Potentiometer -> ESP32 -> Threshold logic and red/green LEDs -> Wi-Fi HT
       - 403 = unknown device ID
       - 422 = invalid payload
 
-## Future Plans
-I built this project to learn and demonstrate:
+## Threat Model Summary
+## Assets
+- Sensor data integrity
+- Backend availability
+- Database integrity
+- Dashboard visibility
+- Wi-Fi credentials
+- API key
+- Device identity
+- Future actuator safety
 
+## Threats
+### 1. Fake client submits sensor data
+- Risk: false readings, bad dashboards, wrong future control decisions
+- Current control: API key authentication
+- Current control: device ID allowlist
+
+### 2. Valid device sends malformed or impossible readings
+- Risk: corrupted database, misleading alerts, unsafe future automation
+- Current control: input validation
+
+### 3. Secrets exposed in source control
+- Risk: unauthorized access to backend or Wi-Fi
+- Current control: `secrets.h`
+- Current control: `.gitignore`
+
+### 4. Compromised IoT node on trusted network
+- Risk: pivoting or spoofed telemetry
+- Planned control: isolate IoT devices on separate VLAN/network
+- Planned control: firewall restrictions
+
+### 5. Backend unavailable
+- Risk: telemetry loss, stale dashboards
+- Planned control: move to Raspberry Pi always-on host
+- Planned control: service management and restart behavior
+
+### 6. Future actuator behaves unsafely
+- Risk: incorrect vent movement or unsafe environmental control
+- Planned control: fail-open design
+- Planned control: manual override
+- Planned control: min/max actuator limits
+- Planned control: deadband and cooldown logic
+
+## Security Posture Summary
+This project currently implements:
+- authentication
+- device identity validation
+- payload validation
+- secrets separation
+
+This project still needs:
+- stronger deployment on Raspberry Pi
+- network segmentation
+- MQTT authentication
+- logging/alerting improvements
+- actuator safety controls before real control deployment
+
+## How to Run
+1) ESP32
+Open the project in PlatformIO
+Configure include/secrets.h
+Upload the firmware to the ESP32
+Open Serial Monitor
+2) Backend
+From the backend/ folder, run: .venv\Scripts\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+3) Dashboard
+Open in browser: http://127.0.0.1:8000/dashboard
+Or from another device on the same network: http://<your-computer-ip>:8000/dashboard
+
+## Validation and Testing
+The following tests have been performed:
+- Sensor data changes with environment changes
+- Potentiometer changes threshold behavior
+- LEDs reflect alert vs normal state
+- Backend receives ESP32 telemetry
+- Dashboard updates live
+- SQLite stores readings persistently
+- Invalid API key returns 401
+- Invalid device ID returns 403
+- Invalid humidity/temperature/threshold values return 422
+
+## Future Plans
+### Near-Term
+- Move backend to Raspberry Pi
+- Add MQTT
+- Add Grafana
+- Add multiple ESP32-C3 nodes
+- Add RSSI and uptime telemetry
+
+### Mid-Term
+- Add ESP-NOW relay/gateway support
+- Upgrade sensors from DHT11 to BME280/SHT31
+- Build one durable node with enclosure/perfboard
+
+### Long-Term
+- Add mini vent actuator prototype
+- Add safe control logic
+- Add LocalStack / AWS-style architecture practice
+- Add STM32 + RTOS track
+- Add TinyML/anomaly detection
+- Digital Twin
+
+## What I learned...
 - Embedded systems
 - Sensor integration
 - IoT telemetry
@@ -98,8 +200,6 @@ I built this project to learn and demonstrate:
 - Dashboarding and observability
 - Basic IoT security controls
 - Systems engineering thinking for cyber-physical systems
-
-This project is intended to grow into a distributed sensor network with Raspberry Pi hosting, MQTT, Grafana, relay/gateway nodes, and later actuator control.
 
 ## Project Structure
 ```text
