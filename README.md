@@ -170,6 +170,19 @@ The following tests have been performed:
 - Invalid device ID returns 403
 - Invalid humidity/temperature/threshold values return 422
 
+Validation tests to run:
+- Sensor reads correctly
+- Potentiometer changes threshold
+- LEDs change state correctly
+- ESP32 connects to Wi-Fi
+- Backend receives data
+- SQLite stores data
+- Dashboard updates
+- API key rejects bad clients
+- Device ID rejects unknown devices
+- Input validation rejects impossible payloads
+- Decision-support status changes with threshold/value changes
+
 ## Future Plans
 ### Near-Term
 - Move backend to Raspberry Pi
