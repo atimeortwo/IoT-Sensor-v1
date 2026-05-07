@@ -72,7 +72,7 @@ It also includes basic security controls such as:
 - JavaScript
 - Chart.js
   
-## Data from sensor to end user (DSEU) v1 
+## Data from sensor to end user (DSEU) v1 - What I call it.
 DHT11 + Potentiometer -> ESP32 -> Threshold logic and red/green LEDs -> Wi-Fi HTTP POST -> FastAPI backend -> SQLite database -> Live dashboard + history chart
 
 <img width="838" height="260" alt="image" src="https://github.com/user-attachments/assets/d25a3b36-bf5e-4d9f-b49f-35eeb8134239" />
@@ -145,7 +145,7 @@ This project still needs:
 - MQTT authentication
 - logging/alerting improvements
 - actuator safety controls before real control deployment
-
+  
 ## How to Run
 1) ESP32
 Open the project in PlatformIO
@@ -190,6 +190,62 @@ The following tests have been performed:
 - Add STM32 + RTOS track
 - Add TinyML/anomaly detection
 - Digital Twin
+
+## Decision Support Logic
+
+This system is intended not only to collect and display telemetry, but also to support operational decisions.
+
+The current and planned purpose of the system is to answer:
+
+- What is happening?
+- How serious is it?
+- What action should be taken?
+
+### Current decision categories
+
+The system can classify or support classification of states such as:
+
+- `NORMAL`
+- `CAUTION`
+- `ALERT`
+- `CRITICAL`
+- `COMM_DEGRADED`
+- `NODE_OFFLINE`
+- `DATA_INVALID`
+
+### Example determination logic
+
+Examples of determinations include:
+
+- If temperature is below threshold and stable, the system is `NORMAL`
+- If temperature is above threshold briefly, the system is `CAUTION`
+- If temperature is significantly above threshold or rising further, the system is `ALERT`
+- If humidity is outside acceptable range, the system may enter `ALERT`
+- If RSSI is weak, the system may enter `COMM_DEGRADED`
+- If a node stops reporting, the system may enter `NODE_OFFLINE`
+- If payload values are impossible, the system is `DATA_INVALID`
+
+### Recommended actions
+
+The system is designed to provide human-readable recommended actions, such as:
+
+- `No action required`
+- `Monitor trend`
+- `Inspect room conditions`
+- `Check sensor`
+- `Check Wi-Fi or relay placement`
+- `Prepare control action`
+- `Check node power or connectivity`
+
+### Future decision-support extensions
+
+Planned improvements include:
+
+- rate-of-change based decisions
+- time-above-threshold decisions
+- room-to-room comparison logic
+- comfort/error metrics
+- future automated vent-control recommendations
 
 ## What I learned...
 - Embedded systems
