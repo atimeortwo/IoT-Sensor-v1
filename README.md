@@ -156,7 +156,7 @@ Open Serial Monitor
 From the backend/ folder, run: .venv\Scripts\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 3) Dashboard
 Open in browser: http://127.0.0.1:8000/dashboard
-Or from another device on the same network: http://<your-computer-ip>:8000/dashboard
+or from another device on the same network: http://<your-computer-ip>:8000/dashboard
 
 ## Validation and Testing
 The following tests have been performed:
